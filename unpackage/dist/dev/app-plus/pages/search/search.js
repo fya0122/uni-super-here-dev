@@ -1,0 +1,2 @@
+setCssToHead([".",[1],"search-page.",[1],"data-v-e6e58dac { width: 100%; height: 100%; position: absolute; background: rgb(248, 248, 248); }\n",],undefined,{path:"./pages/search/search.wxss"})();
+document.dispatchEvent(new CustomEvent("generateFuncReady", { detail: { generateFunc: $gwx('./pages/search/search.wxml') } }));

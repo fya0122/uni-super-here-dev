@@ -1,0 +1,2 @@
+setCssToHead([".",[1],"index-page.",[1],"data-v-94d37f60 { width: 100%; height: 100%; position: absolute; background: rgb(248, 248, 248); }\n.",[1],"carousel.",[1],"data-v-94d37f60 { width: 100%; height: ",[0,440],"; }\n.",[1],"carousel wx-image.",[1],"data-v-94d37f60 { width: 100%; height: 100%; }\n",],undefined,{path:"./pages/index/index.wxss"})();
+document.dispatchEvent(new CustomEvent("generateFuncReady", { detail: { generateFunc: $gwx('./pages/index/index.wxml') } }));
