@@ -98,52 +98,121 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0; //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-var _default =
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var _common = _interopRequireDefault(__webpack_require__(/*! ../../common/common.js */ "../../../uni-super-here-dev/common/common.js"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _uniRate = function _uniRate() {return __webpack_require__.e(/*! import() | node-modules/@dcloudio/uni-ui/lib/uni-rate/uni-rate */ "node-modules/@dcloudio/uni-ui/lib/uni-rate/uni-rate").then(__webpack_require__.bind(null, /*! @dcloudio/uni-ui/lib/uni-rate/uni-rate */ "../../../uni-super-here-dev/node_modules/@dcloudio/uni-ui/lib/uni-rate/uni-rate.vue"));};var _default =
+
+
+
 {
   data: function data() {
     return {
-      swiperList: [] };
+      swiperList: [],
+      hotSuperheroList: [] };
 
   },
   onLoad: function onLoad() {
     this._getSwiperData();
   },
   methods: {
-    _getSwiperData: function _getSwiperData() {
+    _getSwiperData: function _getSwiperData() {var _this = this;
+      uni.showLoading({
+        title: '加载中' });
+
       uni.request({
-        url: 'https://www.imovietrailer.com/superhero/index/carousel/list',
+        url: _common.default.api_base_url + '/index/carousel/list',
         header: {
           'Content-Type': 'application/x-www-form-urlencoded' },
 
         data: {
-          // qq: '2121140461'
-          qq: '3388643380' },
+          qq: _common.default.qq },
 
         method: 'POST',
         success: function success(res) {
-          console.log(JSON.stringify(res), " at pages\\index\\index.vue:37");
+          if (res.data.status === 200 && res.data.msg === 'OK') {
+            _this.swiperList = res.data.data;
+          } else {
+            _this.swiperList = [];
+          }
         },
         fail: function fail(err) {
-          console.log(err, " at pages\\index\\index.vue:40");
+          console.log(err, " at pages\\index\\index.vue:79");
+          _this.swiperList = [];
         },
         complete: function complete() {
-          console.log('结束了', " at pages\\index\\index.vue:43");
+          _this._getSuperheroData();
         } });
 
-    } } };exports.default = _default;
+    },
+    _getSuperheroData: function _getSuperheroData() {var _this2 = this;
+      wx.request({
+        url: _common.default.api_base_url + '/index/movie/hot?type=superhero',
+        method: 'POST',
+        data: {
+          qq: _common.default.qq },
+
+        header: {
+          'Content-Type': 'application/x-www-form-urlencoded' },
+
+        success: function success(res) {
+          if (res.data.status === 200 && res.data.msg === 'OK') {
+            _this2.hotSuperheroList = res.data.data;
+          } else {
+            _this2.hotSuperheroList = [];
+          }
+        },
+        fail: function fail(err) {
+          console.log(err, " at pages\\index\\index.vue:105");
+          _this2.hotSuperheroList = [];
+        },
+        complete: function complete() {
+          uni.hideLoading();
+        } });
+
+    } },
+
+  components: {
+    uniRate: _uniRate } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-app-plus/dist/index.js */ "./node_modules/@dcloudio/uni-app-plus/dist/index.js")["default"]))
 
 /***/ }),

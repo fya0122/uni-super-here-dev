@@ -35,7 +35,20 @@
 				</view>
 			</view>
 		</scroll-view>
-
+		<!-- 热门超英 -->
+		<view class="page-block super-hot">
+			<view class="hot-title-waapper">
+				<image class="hot-ico" src="../../static/icos/interest.png" />
+				<view class="hot-title">
+					热门预告
+				</view>
+			</view>
+		</view>
+		<!-- 热门预告的那些v-for -->
+		<view class="page-block hot-movies">
+			<video class="hot-movie-single" controls :poster="item.poster" :key="item.id" v-for="item in trailerSuperheroList"
+			 :src="item.trailer"></video>
+		</view>
 	</view>
 </template>
 
@@ -48,7 +61,8 @@
 		data() {
 			return {
 				swiperList: [],
-				hotSuperheroList: []
+				hotSuperheroList: [],
+				trailerSuperheroList: []
 			}
 		},
 		onLoad() {
@@ -106,6 +120,32 @@
 						this.hotSuperheroList = []
 					}),
 					complete: (() => {
+						this._getTrailderSuperheroData()
+					})
+				})
+			},
+			_getTrailderSuperheroData() {
+				uni.request({
+					url: common.api_base_url + '/index/movie/hot?type=trailer',
+					method: 'POST',
+					data: {
+						qq: common.qq
+					},
+					header: {
+						'Content-Type': 'application/x-www-form-urlencoded'
+					},
+					success: ((res) => {
+						if (res.data.status === 200 && res.data.msg === 'OK') {
+							this.trailerSuperheroList = res.data.data
+						} else {
+							this.trailerSuperheroList = []
+						}
+					}),
+					fail: ((err) => {
+						console.log(err)
+						this.trailerSuperheroList = []
+					}),
+					complete: (() => {
 						uni.hideLoading()
 					})
 				})
@@ -119,8 +159,6 @@
 <style scoped>
 	.index-page {
 		width: 100%;
-		height: 100%;
-		position: absolute;
 		background: rgb(248, 248, 248);
 	}
 
@@ -206,8 +244,22 @@
 	}
 
 	.movie-score {
-		font-size: 12upx;
+		font-size: 24upx;
 		color: grey;
 		margin-left: 8upx;
+	}
+
+	.hot-movies {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		padding: 0 20upx 20upx 20upx;
+	}
+
+	.hot-movie-single {
+		width: 350upx;
+		height: 220upx;
+		margin-top: 10upx;
 	}
 </style>

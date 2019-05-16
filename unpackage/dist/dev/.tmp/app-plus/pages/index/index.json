@@ -1,4 +1,6 @@
 {
   "titleNView": false,
-  "usingComponents": {}
+  "usingComponents": {
+    "uni-rate": "/node-modules/@dcloudio/uni-ui/lib/uni-rate/uni-rate"
+  }
 }
