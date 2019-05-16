@@ -18,7 +18,6 @@
 				</view>
 			</view>
 		</view>
-
 		<!-- 可滑动的横向 -->
 		<scroll-view scroll-x="true" class="page-block hot">
 			<view v-for="item in hotSuperheroList" :key="item.id" class="single-poster">
@@ -28,11 +27,7 @@
 						{{ item.name }}
 					</view>
 					<view class="movie-score-wrapper">
-						<image class="star-ico" src="../../static/icos/star-yellow.png"></image>
-						<image class="star-ico" src="../../static/icos/star-yellow.png"></image>
-						<image class="star-ico" src="../../static/icos/star-yellow.png"></image>
-						<image class="star-ico" src="../../static/icos/star-yellow.png"></image>
-						<image class="star-ico" src="../../static/icos/star-gray.png"></image>
+						<uni-rate size="14" :value="item.score / 2" max="5"></uni-rate>
 						<view class="movie-score">
 							{{ item.score }}
 						</view>
@@ -46,6 +41,9 @@
 
 <script>
 	import common from '../../common/common.js'
+	import {
+		uniRate
+	} from '@dcloudio/uni-ui'
 	export default {
 		data() {
 			return {
@@ -112,6 +110,9 @@
 					})
 				})
 			}
+		},
+		components: {
+			uniRate
 		}
 	}
 </script>

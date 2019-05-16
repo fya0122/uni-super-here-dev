@@ -1,0 +1,23 @@
+{
+  "name": "uni-super-here-dev",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fya0122/uni-super-here-dev.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fya0122/uni-super-here-dev/issues"
+  },
+  "homepage": "https://github.com/fya0122/uni-super-here-dev#readme",
+  "dependencies": {
+    "@dcloudio/uni-ui": "0.0.8"
+  }
+}
