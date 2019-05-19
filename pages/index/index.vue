@@ -49,6 +49,41 @@
 			<video class="hot-movie-single" controls :poster="item.poster" :key="item.id" v-for="item in trailerSuperheroList"
 			 :src="item.trailer"></video>
 		</view>
+		<!-- 猜你喜欢 -->
+		<view class="page-block super-hot">
+			<view class="hot-title-waapper">
+				<image class="hot-ico" src="../../static/icos/guess-u-like.png" />
+				<view class="hot-title">
+					猜你喜欢
+				</view>
+			</view>
+		</view>
+		<view class="page-block guess-u-like">
+			<view :key="item.id" v-for="(item, index) in praiseList" class="single-like-movie">
+				<image :src="item.cover" class="like-movie-img"></image>
+				<view class="movie-desc">
+					<view class="movie-title">
+						{{ item.name }}
+					</view>
+					<uni-rate size="14" :value="item.score / 2" max="5"></uni-rate>
+					<view class="movie-info">
+						{{ item.basicInfo }}
+					</view>
+					<view class="movie-info">
+						{{ item.releaseDate }}
+					</view>
+				</view>
+				<view class="movie-oper" :data-index="index" @click="praiseMe">
+					<image class="praise-ico" src="../../static/icos/praise.png"></image>
+					<view class="praise-me">
+						点赞
+					</view>
+					<view :animation="animationDataArr[index]" class="praise-me animation-opacity">
+						+1
+					</view>
+				</view>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -62,16 +97,58 @@
 			return {
 				swiperList: [],
 				hotSuperheroList: [],
-				trailerSuperheroList: []
+				trailerSuperheroList: [],
+				animationData: {},
+				praiseList: [],
+				animationDataArr: [{}, {}, {}, {}, {}]
 			}
 		},
 		onLoad() {
+			// #ifdef APP-PLUS || MP-WEIXIN
+			this._setAnimation()
+			// #endif
+			this._getSwiperData()
+		},
+		onUnload() {
+			// 页面卸载的时候清除动画数据
+			// this.animationData = {}
+			this.animationDataArr = [{}, {}, {}, {}, {}]
+		},
+		onPullDownRefresh() {
 			this._getSwiperData()
 		},
 		methods: {
+			// 点击操作
+			praiseMe(e) {
+				// #ifdef APP-PLUS || MP-WEIXIN
+				const index = e.currentTarget.dataset.index
+
+				// 构建动画数据，并且通过step来表示这组动画的完成
+				this.animation.translateY(-70).opacity(1).step({
+					duration: 400
+				})
+				this.animationData = this.animation
+				this.animationDataArr[index] = this.animationData.export()
+
+				// 执行完毕动画以后肯定是要复原的
+				setTimeout(() => {
+					this.animation.translateY(0).opacity(0).step({
+						duration: 0
+					})
+					this.animationData = this.animation
+					this.animationDataArr[index] = this.animationData.export()
+				}, 500)
+				// #endif
+			},
+			// 设置动画
+			_setAnimation() {
+				this.animation = uni.createAnimation()
+			},
+			// 得到数据
 			_getSwiperData() {
 				uni.showLoading({
-					title: '加载中'
+					title: '加载中',
+					mask: true
 				});
 				uni.request({
 					url: common.api_base_url + '/index/carousel/list',
@@ -146,7 +223,34 @@
 						this.trailerSuperheroList = []
 					}),
 					complete: (() => {
+						this._getPraiseData()
+					})
+				})
+			},
+			_getPraiseData() {
+				uni.request({
+					url: common.api_base_url + '/index/guessULike',
+					method: 'POST',
+					data: {
+						qq: common.qq
+					},
+					header: {
+						'Content-Type': 'application/x-www-form-urlencoded'
+					},
+					success: ((res) => {
+						if (res.data.status === 200 && res.data.msg === 'OK') {
+							this.praiseList = res.data.data
+						} else {
+							this.praiseList = []
+						}
+					}),
+					fail: ((err) => {
+						console.log(err)
+						this.praiseList = []
+					}),
+					complete: (() => {
 						uni.hideLoading()
+						uni.stopPullDownRefresh()
 					})
 				})
 			}
@@ -261,5 +365,66 @@
 		width: 350upx;
 		height: 220upx;
 		margin-top: 10upx;
+	}
+
+	.guess-u-like {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.single-like-movie {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		padding: 30upx 20upx;
+	}
+
+	.like-movie-img {
+		width: 180upx;
+		height: 240upx;
+		border-radius: 3%;
+	}
+
+	.movie-desc {
+		width: 340upx;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.movie-title {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.movie-info {
+		color: #808080;
+		font-size: 28upx;
+	}
+
+	.movie-oper {
+		width: 140upx;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		border-left: dashed 4upx;
+		border-left-color: #dbdbda;
+	}
+
+	.praise-ico {
+		width: 40upx;
+		height: 40upx;
+		align-self: center;
+	}
+
+	.praise-me {
+		font-size: 28upx;
+		color: #feab2a;
+		align-self: center;
+	}
+
+	.animation-opacity {
+		font-weight: bold;
+		opacity: 0;
 	}
 </style>

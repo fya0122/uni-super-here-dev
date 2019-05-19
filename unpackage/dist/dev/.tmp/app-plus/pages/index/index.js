@@ -140,6 +140,54 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 var _common = _interopRequireDefault(__webpack_require__(/*! ../../common/common.js */ "../../../uni-super-here-dev/common/common.js"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _uniRate = function _uniRate() {return __webpack_require__.e(/*! import() | node-modules/@dcloudio/uni-ui/lib/uni-rate/uni-rate */ "node-modules/@dcloudio/uni-ui/lib/uni-rate/uni-rate").then(__webpack_require__.bind(null, /*! @dcloudio/uni-ui/lib/uni-rate/uni-rate */ "../../../uni-super-here-dev/node_modules/@dcloudio/uni-ui/lib/uni-rate/uni-rate.vue"));};var _default =
 
 
@@ -148,14 +196,53 @@ var _common = _interopRequireDefault(__webpack_require__(/*! ../../common/common
   data: function data() {
     return {
       swiperList: [],
-      hotSuperheroList: [] };
+      hotSuperheroList: [],
+      trailerSuperheroList: [],
+      animationData: {},
+      praiseList: [],
+      animationDataArr: [{}, {}, {}, {}, {}] };
 
   },
   onLoad: function onLoad() {
+
+    this._setAnimation();
+
     this._getSwiperData();
   },
+  onUnload: function onUnload() {
+    // 页面卸载的时候清除动画数据
+    // this.animationData = {}
+    this.animationDataArr = [];
+  },
   methods: {
-    _getSwiperData: function _getSwiperData() {var _this = this;
+    // 点击操作
+    praiseMe: function praiseMe(e) {var _this = this;
+
+      var index = e.currentTarget.dataset.index;
+
+      // 构建动画数据，并且通过step来表示这组动画的完成
+      this.animation.translateY(-70).opacity(1).step({
+        duration: 400 });
+
+      this.animationData = this.animation;
+      this.animationDataArr[index] = this.animationData.export();
+
+      // 执行完毕动画以后肯定是要复原的
+      setTimeout(function () {
+        _this.animation.translateY(0).opacity(0).step({
+          duration: 0 });
+
+        _this.animationData = _this.animation;
+        _this.animationDataArr[index] = _this.animationData.export();
+      }, 500);
+
+    },
+    // 设置动画
+    _setAnimation: function _setAnimation() {
+      this.animation = uni.createAnimation();
+    },
+    // 得到数据
+    _getSwiperData: function _getSwiperData() {var _this2 = this;
       uni.showLoading({
         title: '加载中' });
 
@@ -170,21 +257,21 @@ var _common = _interopRequireDefault(__webpack_require__(/*! ../../common/common
         method: 'POST',
         success: function success(res) {
           if (res.data.status === 200 && res.data.msg === 'OK') {
-            _this.swiperList = res.data.data;
+            _this2.swiperList = res.data.data;
           } else {
-            _this.swiperList = [];
+            _this2.swiperList = [];
           }
         },
         fail: function fail(err) {
-          console.log(err, " at pages\\index\\index.vue:79");
-          _this.swiperList = [];
+          console.log(err, " at pages\\index\\index.vue:166");
+          _this2.swiperList = [];
         },
         complete: function complete() {
-          _this._getSuperheroData();
+          _this2._getSuperheroData();
         } });
 
     },
-    _getSuperheroData: function _getSuperheroData() {var _this2 = this;
+    _getSuperheroData: function _getSuperheroData() {var _this3 = this;
       wx.request({
         url: _common.default.api_base_url + '/index/movie/hot?type=superhero',
         method: 'POST',
@@ -196,14 +283,67 @@ var _common = _interopRequireDefault(__webpack_require__(/*! ../../common/common
 
         success: function success(res) {
           if (res.data.status === 200 && res.data.msg === 'OK') {
-            _this2.hotSuperheroList = res.data.data;
+            _this3.hotSuperheroList = res.data.data;
           } else {
-            _this2.hotSuperheroList = [];
+            _this3.hotSuperheroList = [];
           }
         },
         fail: function fail(err) {
-          console.log(err, " at pages\\index\\index.vue:105");
-          _this2.hotSuperheroList = [];
+          console.log(err, " at pages\\index\\index.vue:192");
+          _this3.hotSuperheroList = [];
+        },
+        complete: function complete() {
+          _this3._getTrailderSuperheroData();
+        } });
+
+    },
+    _getTrailderSuperheroData: function _getTrailderSuperheroData() {var _this4 = this;
+      uni.request({
+        url: _common.default.api_base_url + '/index/movie/hot?type=trailer',
+        method: 'POST',
+        data: {
+          qq: _common.default.qq },
+
+        header: {
+          'Content-Type': 'application/x-www-form-urlencoded' },
+
+        success: function success(res) {
+          if (res.data.status === 200 && res.data.msg === 'OK') {
+            _this4.trailerSuperheroList = res.data.data;
+          } else {
+            _this4.trailerSuperheroList = [];
+          }
+        },
+        fail: function fail(err) {
+          console.log(err, " at pages\\index\\index.vue:218");
+          _this4.trailerSuperheroList = [];
+        },
+        complete: function complete() {
+          _this4._getPraiseData();
+        } });
+
+    },
+    _getPraiseData: function _getPraiseData() {var _this5 = this;
+      uni.request({
+        url: _common.default.api_base_url + '/index/guessULike',
+        method: 'POST',
+        data: {
+          qq: _common.default.qq },
+
+        header: {
+          'Content-Type': 'application/x-www-form-urlencoded' },
+
+        success: function success(res) {
+          if (res.data.status === 200 && res.data.msg === 'OK') {
+            _this5.praiseList = res.data.data;
+            console.log(_this5.praiseList, " at pages\\index\\index.vue:239");
+          } else {
+            _this5.praiseList = [];
+          }
+        },
+        fail: function fail(err) {
+          console.log(err, " at pages\\index\\index.vue:245");
+          _this5.praiseList = [];
         },
         complete: function complete() {
           uni.hideLoading();
