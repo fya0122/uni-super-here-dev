@@ -212,7 +212,10 @@ var _common = _interopRequireDefault(__webpack_require__(/*! ../../common/common
   onUnload: function onUnload() {
     // 页面卸载的时候清除动画数据
     // this.animationData = {}
-    this.animationDataArr = [];
+    this.animationDataArr = [{}, {}, {}, {}, {}];
+  },
+  onPullDownRefresh: function onPullDownRefresh() {
+    this._getSwiperData();
   },
   methods: {
     // 点击操作
@@ -244,7 +247,8 @@ var _common = _interopRequireDefault(__webpack_require__(/*! ../../common/common
     // 得到数据
     _getSwiperData: function _getSwiperData() {var _this2 = this;
       uni.showLoading({
-        title: '加载中' });
+        title: '加载中',
+        mask: true });
 
       uni.request({
         url: _common.default.api_base_url + '/index/carousel/list',
@@ -263,7 +267,7 @@ var _common = _interopRequireDefault(__webpack_require__(/*! ../../common/common
           }
         },
         fail: function fail(err) {
-          console.log(err, " at pages\\index\\index.vue:166");
+          console.log(err, " at pages\\index\\index.vue:170");
           _this2.swiperList = [];
         },
         complete: function complete() {
@@ -289,7 +293,7 @@ var _common = _interopRequireDefault(__webpack_require__(/*! ../../common/common
           }
         },
         fail: function fail(err) {
-          console.log(err, " at pages\\index\\index.vue:192");
+          console.log(err, " at pages\\index\\index.vue:196");
           _this3.hotSuperheroList = [];
         },
         complete: function complete() {
@@ -315,7 +319,7 @@ var _common = _interopRequireDefault(__webpack_require__(/*! ../../common/common
           }
         },
         fail: function fail(err) {
-          console.log(err, " at pages\\index\\index.vue:218");
+          console.log(err, " at pages\\index\\index.vue:222");
           _this4.trailerSuperheroList = [];
         },
         complete: function complete() {
@@ -336,17 +340,17 @@ var _common = _interopRequireDefault(__webpack_require__(/*! ../../common/common
         success: function success(res) {
           if (res.data.status === 200 && res.data.msg === 'OK') {
             _this5.praiseList = res.data.data;
-            console.log(_this5.praiseList, " at pages\\index\\index.vue:239");
           } else {
             _this5.praiseList = [];
           }
         },
         fail: function fail(err) {
-          console.log(err, " at pages\\index\\index.vue:245");
+          console.log(err, " at pages\\index\\index.vue:248");
           _this5.praiseList = [];
         },
         complete: function complete() {
           uni.hideLoading();
+          uni.stopPullDownRefresh();
         } });
 
     } },
