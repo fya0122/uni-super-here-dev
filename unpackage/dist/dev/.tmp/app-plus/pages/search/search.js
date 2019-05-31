@@ -98,7 +98,24 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0; //
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var _common = _interopRequireDefault(__webpack_require__(/*! ../../common/common.js */ "../../../uni-super-here-dev/common/common.js"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} //
 //
 //
 //
@@ -114,29 +131,70 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-var _default =
-{};exports.default = _default;
+var _default = { data: function data() {return { rowsList: [], myKeywords: '', // 搜索的关键字
+      page: 1, // 当前第几页
+      totalPages: 0 // 总页数
+    };}, onLoad: function onLoad() {this._getSearchPageData();}, methods: { _getSearchPageData: function _getSearchPageData() {var _this = this;uni.showLoading({ title: '加载中', mask: true });uni.request({
+        url: _common.default.api_base_url + '/search/list?keywords=&page=&pageSize=',
+        header: {
+          'Content-Type': 'application/x-www-form-urlencoded' },
+
+        data: {
+          qq: _common.default.qq },
+
+        method: 'POST',
+        success: function success(res) {
+          if (res.data.status === 200 && res.data.msg === 'OK') {
+            _this.rowsList = res.data.data.rows;
+          } else {
+            _this.rowsList = [];
+          }
+        },
+        fail: function fail(err) {
+          console.log(err, " at pages\\search\\search.vue:54");
+          _this.rowsList = [];
+        },
+        complete: function complete() {
+          uni.hideLoading();
+        } });
+
+    },
+    searchMe: function searchMe(e) {
+      this.myKeywords = e.detail.value;
+      this.rowsList = [];
+      this.pagedTrailerList(this.myKeywords, 1, 15);
+    },
+    pagedTrailerList: function pagedTrailerList(keywords, page, pageSize) {var _this2 = this;
+      uni.showLoading({
+        title: '加载中',
+        mask: true });
+
+      uni.request({
+        url: _common.default.api_base_url + '/search/list?keywords=' + keywords + '&page=' + page + '&pageSize=' + pageSize,
+        header: {
+          'Content-Type': 'application/x-www-form-urlencoded' },
+
+        data: {
+          qq: _common.default.qq },
+
+        method: 'POST',
+        success: function success(res) {
+          if (res.data.status === 200 && res.data.msg === 'OK') {
+            var templateData = res.data.data.rows;
+            _this2.rowsList = _this2.rowsList.concat(templateData);
+            _this2.totalPages = res.data.data.total;
+            _this2.page = page;
+          }
+        },
+        fail: function fail(err) {
+          console.log(err, " at pages\\search\\search.vue:90");
+        },
+        complete: function complete() {
+          uni.hideLoading();
+        } });
+
+    } } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-app-plus/dist/index.js */ "./node_modules/@dcloudio/uni-app-plus/dist/index.js")["default"]))
 
 /***/ }),
 

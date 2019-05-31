@@ -10,7 +10,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var config = {
   api_base_url: 'https://www.imovietrailer.com/superhero',
-  qq: 3388643380 || false };var _default =
+  qq: 'lee50565882' };var _default =
 
 
 config;exports.default = _default;

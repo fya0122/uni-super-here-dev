@@ -76,6 +76,6 @@
 .poster.data-v-e6e58dac {
 	width: 200rpx;
 	height: 270rpx;
-	background: red;
+	background: #eee;
 }
 

@@ -4,39 +4,98 @@
 			<view class="search-ico-wrapper">
 				<image class="search-ico" src="../../static/icos/search.png"></image>
 			</view>
-			<input type="text" placeholder="搜索预告" maxlength="10" class="search-text"/>
+			<input @confirm="searchMe" confirm-type="search" type="text" placeholder="搜索预告" maxlength="10" class="search-text" />
 		</view>
 		<view class="movie-list page-block">
-			<view class="movie-wrapper">
-				<image class="poster" src=""></image>
-			</view>
-			<view class="movie-wrapper">
-				<image class="poster" src=""></image>
-			</view>
-			<view class="movie-wrapper">
-				<image class="poster" src=""></image>
-			</view>
-			<view class="movie-wrapper">
-				<image class="poster" src=""></image>
-			</view>
-			<view class="movie-wrapper">
-				<image class="poster" src=""></image>
-			</view>
-			<view class="movie-wrapper">
-				<image class="poster" src=""></image>
-			</view>
-			<view class="movie-wrapper">
-				<image class="poster" src=""></image>
-			</view>
-			<view class="movie-wrapper">
-				<image class="poster" src=""></image>
+			<view :key="item.id" v-for="item in rowsList" class="movie-wrapper">
+				<image class="poster" :src="item.cover"></image>
 			</view>
 		</view>
 	</view>
 </template>
 
 <script>
-	export default {}
+	import common from '../../common/common.js'
+	export default {
+		data() {
+			return {
+				rowsList: [],
+				myKeywords: '', // 搜索的关键字
+				page: 1, // 当前第几页
+				totalPages: 0 // 总页数
+			}
+		},
+		onLoad() {
+			this._getSearchPageData()
+		},
+		methods: {
+			_getSearchPageData() {
+				uni.showLoading({
+					title: '加载中',
+					mask: true
+				});
+				uni.request({
+					url: common.api_base_url + '/search/list?keywords=&page=&pageSize=',
+					header: {
+						'Content-Type': 'application/x-www-form-urlencoded'
+					},
+					data: {
+						qq: common.qq
+					},
+					method: 'POST',
+					success: ((res) => {
+						if (res.data.status === 200 && res.data.msg === 'OK') {
+							this.rowsList = res.data.data.rows
+						} else {
+							this.rowsList = []
+						}
+					}),
+					fail: ((err) => {
+						console.log(err)
+						this.rowsList = []
+					}),
+					complete: (() => {
+						uni.hideLoading()
+					})
+				})
+			},
+			searchMe(e) {
+				this.myKeywords = e.detail.value
+				this.rowsList = []
+				this.pagedTrailerList(this.myKeywords, 1, 15)
+			},
+			pagedTrailerList(keywords, page, pageSize) {
+				uni.showLoading({
+					title: '加载中',
+					mask: true
+				});
+				uni.request({
+					url: common.api_base_url + '/search/list?keywords=' + keywords + '&page=' + page + '&pageSize=' + pageSize,
+					header: {
+						'Content-Type': 'application/x-www-form-urlencoded'
+					},
+					data: {
+						qq: common.qq
+					},
+					method: 'POST',
+					success: ((res) => {
+						if (res.data.status === 200 && res.data.msg === 'OK') {
+							const templateData = res.data.data.rows
+							this.rowsList = this.rowsList.concat(templateData)
+							this.totalPages = res.data.data.total
+							this.page = page
+						}
+					}),
+					fail: ((err) => {
+						console.log(err)
+					}),
+					complete: (() => {
+						uni.hideLoading()
+					})
+				})
+			}
+		}
+	}
 </script>
 
 <style scoped>
@@ -97,6 +156,6 @@
 	.poster {
 		width: 200upx;
 		height: 270upx;
-		background: red;
+		background: #eee;
 	}
 </style>
