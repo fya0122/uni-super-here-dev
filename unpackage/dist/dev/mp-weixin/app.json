@@ -1,8 +1,10 @@
 {
   "pages": [
-    "pages/index/index",
+    "pages/me/me",
     "pages/search/search",
-    "pages/me/me"
+    "pages/index/index",
+    "pages/movie/movie",
+    "pages/cover/cover"
   ],
   "subPackages": [],
   "window": {

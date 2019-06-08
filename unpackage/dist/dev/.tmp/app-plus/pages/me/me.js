@@ -98,14 +98,71 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0; //
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0; //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
 //
 //
 var _default =
-{};exports.default = _default;
+{
+  data: function data() {
+    return {
+      isLogin: false,
+      userInfo: {} };
+
+  },
+  onShow: function onShow() {
+    var userInfo = this._checkUserIsLogin();
+    if (userInfo) {
+      this.isLogin = true;
+      this.userInfo = userInfo;
+    } else {
+      this.isLogin = false;
+      this.userInfo = {};
+    }
+  },
+  methods: {
+    _checkUserIsLogin: function _checkUserIsLogin() {
+      var userInfo = uni.getStorageSync("cyyg_userInfo");
+      if (userInfo !== null && userInfo !== "" && userInfo !== undefined) {
+        return userInfo;
+      } else {
+        return null;
+      }
+    },
+    gotoPageMeInfo: function gotoPageMeInfo() {
+      uni.navigateTo({
+        url: '../meInfo/meInfo' });
+
+    },
+    gotoPageRegistLogin: function gotoPageRegistLogin() {
+      uni.navigateTo({
+        url: '../registLogin/registLogin' });
+
+    } } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-app-plus/dist/index.js */ "./node_modules/@dcloudio/uni-app-plus/dist/index.js")["default"]))
 
 /***/ }),
 

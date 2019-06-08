@@ -145,53 +145,243 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var _common = _interopRequireDefault(__webpack_require__(/*! ../../common/common.js */ "../../../uni-super-here-dev/common/common.js"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-var _default = { data: function data() {return { swiperList: [] };}, onLoad: function onLoad() {this._getSwiperData();}, methods: { _getSwiperData: function _getSwiperData() {var _this = this;uni.showLoading({ title: '加载中' });uni.request({ url: _common.default.api_base_url + '/index/carousel/list', header: { 'Content-Type': 'application/x-www-form-urlencoded' }, data: { qq: _common.default.qq }, method: 'POST', success: function success(res) {if (res.data.status === 200 && res.data.msg === 'OK') {_this.swiperList = res.data.data;} else {_this.swiperList = [];}}, fail: function fail(err) {console.log(err);_this.swiperList = [];}, complete: function complete() {uni.hideLoading();} });} } };exports.default = _default;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var _common = _interopRequireDefault(__webpack_require__(/*! ../../common/common.js */ "../../../uni-super-here-dev/common/common.js"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _uniRate = function _uniRate() {return __webpack_require__.e(/*! import() | node-modules/@dcloudio/uni-ui/lib/uni-rate/uni-rate */ "node-modules/@dcloudio/uni-ui/lib/uni-rate/uni-rate").then(__webpack_require__.bind(null, /*! @dcloudio/uni-ui/lib/uni-rate/uni-rate */ "../../../uni-super-here-dev/node_modules/@dcloudio/uni-ui/lib/uni-rate/uni-rate.vue"));};var _default =
+
+
+
+{
+  data: function data() {
+    return {
+      swiperList: [],
+      hotSuperheroList: [],
+      trailerSuperheroList: [],
+      animationData: {},
+      praiseList: [],
+      animationDataArr: [{}, {}, {}, {}, {}] };
+
+  },
+  onLoad: function onLoad() {
+
+    this._setAnimation();
+
+    this._getSwiperData();
+  },
+  onUnload: function onUnload() {
+    // 页面卸载的时候清除动画数据
+    // this.animationData = {}
+    this.animationDataArr = [{}, {}, {}, {}, {}];
+  },
+  onHide: function onHide() {
+    if (this.videoContext) {
+      this.videoContext.pause();
+    }
+  },
+  onPullDownRefresh: function onPullDownRefresh() {
+    this._getSwiperData();
+  },
+  methods: {
+    // 点击操作
+    praiseMe: function praiseMe(e) {var _this = this;
+
+      var index = e.currentTarget.dataset.index;
+
+      // 构建动画数据，并且通过step来表示这组动画的完成
+      this.animation.translateY(-70).opacity(1).step({
+        duration: 400 });
+
+      this.animationData = this.animation;
+      this.animationDataArr[index] = this.animationData.export();
+
+      // 执行完毕动画以后肯定是要复原的
+      setTimeout(function () {
+        _this.animation.translateY(0).opacity(0).step({
+          duration: 0 });
+
+        _this.animationData = _this.animation;
+        _this.animationDataArr[index] = _this.animationData.export();
+      }, 500);
+
+    },
+    // 设置动画
+    _setAnimation: function _setAnimation() {
+      this.animation = uni.createAnimation();
+    },
+    // 得到数据
+    _getSwiperData: function _getSwiperData() {var _this2 = this;
+      uni.showLoading({
+        title: '加载中',
+        mask: true });
+
+      uni.request({
+        url: _common.default.api_base_url + '/index/carousel/list',
+        header: {
+          'Content-Type': 'application/x-www-form-urlencoded' },
+
+        data: {
+          qq: _common.default.qq },
+
+        method: 'POST',
+        success: function success(res) {
+          if (res.data.status === 200 && res.data.msg === 'OK') {
+            _this2.swiperList = res.data.data;
+          } else {
+            _this2.swiperList = [];
+          }
+        },
+        fail: function fail(err) {
+          console.log(err);
+          _this2.swiperList = [];
+        },
+        complete: function complete() {
+          _this2._getSuperheroData();
+        } });
+
+    },
+    _getSuperheroData: function _getSuperheroData() {var _this3 = this;
+      wx.request({
+        url: _common.default.api_base_url + '/index/movie/hot?type=superhero',
+        method: 'POST',
+        data: {
+          qq: _common.default.qq },
+
+        header: {
+          'Content-Type': 'application/x-www-form-urlencoded' },
+
+        success: function success(res) {
+          if (res.data.status === 200 && res.data.msg === 'OK') {
+            _this3.hotSuperheroList = res.data.data;
+          } else {
+            _this3.hotSuperheroList = [];
+          }
+        },
+        fail: function fail(err) {
+          console.log(err);
+          _this3.hotSuperheroList = [];
+        },
+        complete: function complete() {
+          _this3._getTrailderSuperheroData();
+        } });
+
+    },
+    _getTrailderSuperheroData: function _getTrailderSuperheroData() {var _this4 = this;
+      uni.request({
+        url: _common.default.api_base_url + '/index/movie/hot?type=trailer',
+        method: 'POST',
+        data: {
+          qq: _common.default.qq },
+
+        header: {
+          'Content-Type': 'application/x-www-form-urlencoded' },
+
+        success: function success(res) {
+          if (res.data.status === 200 && res.data.msg === 'OK') {
+            _this4.trailerSuperheroList = res.data.data;
+          } else {
+            _this4.trailerSuperheroList = [];
+          }
+        },
+        fail: function fail(err) {
+          console.log(err);
+          _this4.trailerSuperheroList = [];
+        },
+        complete: function complete() {
+          _this4._getPraiseData();
+        } });
+
+    },
+    _getPraiseData: function _getPraiseData() {var _this5 = this;
+      uni.request({
+        url: _common.default.api_base_url + '/index/guessULike',
+        method: 'POST',
+        data: {
+          qq: _common.default.qq },
+
+        header: {
+          'Content-Type': 'application/x-www-form-urlencoded' },
+
+        success: function success(res) {
+          if (res.data.status === 200 && res.data.msg === 'OK') {
+            _this5.praiseList = res.data.data;
+          } else {
+            _this5.praiseList = [];
+          }
+        },
+        fail: function fail(err) {
+          console.log(err);
+          _this5.praiseList = [];
+        },
+        complete: function complete() {
+          uni.hideLoading();
+          uni.stopPullDownRefresh();
+        } });
+
+    },
+    gotoMoviePage: function gotoMoviePage(e) {
+      var id = e.currentTarget.dataset.id;
+      uni.navigateTo({
+        url: "../movie/movie?id=".concat(id) });
+
+    },
+    // 这段视频播放的时候，让其余的视频都暂停
+    meIsPlaying: function meIsPlaying(e) {
+      var id = '';
+      if (e) {
+        id = e.currentTarget.dataset.playingindex;
+        this.videoContext = uni.createVideoContext(id);
+      }
+      var trailerSuperheroList = this.trailerSuperheroList;var _iteratorNormalCompletion = true;var _didIteratorError = false;var _iteratorError = undefined;try {
+        for (var _iterator = trailerSuperheroList[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {var item = _step.value;
+          if (item.id !== id) {
+            uni.createVideoContext(item.id).pause();
+          }
+        }} catch (err) {_didIteratorError = true;_iteratorError = err;} finally {try {if (!_iteratorNormalCompletion && _iterator.return != null) {_iterator.return();}} finally {if (_didIteratorError) {throw _iteratorError;}}}
+    } },
+
+  components: {
+    uniRate: _uniRate } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ "./node_modules/@dcloudio/uni-mp-weixin/dist/index.js")["default"]))
 
 /***/ }),

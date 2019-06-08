@@ -1,1 +1,1 @@
-<view class="me-page data-v-f41f7cac" bind:__l="__l">me.vue</view>
+<view class="page page-fill data-v-f41f7cac" bind:__l="__l"><view class="header data-v-f41f7cac"></view></view>

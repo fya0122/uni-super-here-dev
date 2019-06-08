@@ -1,0 +1,99 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 页面铺满屏幕 */
+.page-fill.data-v-aca91090 {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+}
+.radio-sex.data-v-aca91090 {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	-webkit-flex-direction: column;
+	    -ms-flex-direction: column;
+	        flex-direction: column;
+}
+.radio-single.data-v-aca91090 {
+	padding: 20rpx 20rpx;
+}
+.submitBtn.data-v-aca91090 {
+	width: 95%;
+	margin-top: 40rpx;
+}
+

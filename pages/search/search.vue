@@ -7,7 +7,7 @@
 			<input @confirm="searchMe" confirm-type="search" type="text" placeholder="搜索预告" maxlength="10" class="search-text" />
 		</view>
 		<view class="movie-list page-block">
-			<view :key="item.id" v-for="item in rowsList" class="movie-wrapper">
+			<view @click="gotoMovie" :data-id="item.id" :key="item.id" v-for="item in rowsList" class="movie-wrapper">
 				<image class="poster" :src="item.cover"></image>
 			</view>
 		</view>
@@ -27,6 +27,15 @@
 		},
 		onLoad() {
 			this._getSearchPageData()
+		},
+		onReachBottom() { // 上拉加载触底的函数
+			let page = this.page + 1
+			let myKeywords = this.myKeywords
+			let totalPages = this.totalPages
+			if (page > totalPages) {
+				return false
+			}
+			this.pagedTrailerList(myKeywords, page, 15)
 		},
 		methods: {
 			_getSearchPageData() {
@@ -92,6 +101,12 @@
 					complete: (() => {
 						uni.hideLoading()
 					})
+				})
+			},
+			gotoMovie(e) {
+				let id = e.currentTarget.dataset.id
+				uni.navigateTo({
+					url: `../movie/movie?id=${id}`
 				})
 			}
 		}

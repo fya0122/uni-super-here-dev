@@ -214,6 +214,11 @@ var _common = _interopRequireDefault(__webpack_require__(/*! ../../common/common
     // this.animationData = {}
     this.animationDataArr = [{}, {}, {}, {}, {}];
   },
+  onHide: function onHide() {
+    if (this.videoContext) {
+      this.videoContext.pause();
+    }
+  },
   onPullDownRefresh: function onPullDownRefresh() {
     this._getSwiperData();
   },
@@ -267,7 +272,7 @@ var _common = _interopRequireDefault(__webpack_require__(/*! ../../common/common
           }
         },
         fail: function fail(err) {
-          console.log(err, " at pages\\index\\index.vue:170");
+          console.log(err, " at pages\\index\\index.vue:175");
           _this2.swiperList = [];
         },
         complete: function complete() {
@@ -293,7 +298,7 @@ var _common = _interopRequireDefault(__webpack_require__(/*! ../../common/common
           }
         },
         fail: function fail(err) {
-          console.log(err, " at pages\\index\\index.vue:196");
+          console.log(err, " at pages\\index\\index.vue:201");
           _this3.hotSuperheroList = [];
         },
         complete: function complete() {
@@ -319,7 +324,7 @@ var _common = _interopRequireDefault(__webpack_require__(/*! ../../common/common
           }
         },
         fail: function fail(err) {
-          console.log(err, " at pages\\index\\index.vue:222");
+          console.log(err, " at pages\\index\\index.vue:227");
           _this4.trailerSuperheroList = [];
         },
         complete: function complete() {
@@ -345,7 +350,7 @@ var _common = _interopRequireDefault(__webpack_require__(/*! ../../common/common
           }
         },
         fail: function fail(err) {
-          console.log(err, " at pages\\index\\index.vue:248");
+          console.log(err, " at pages\\index\\index.vue:253");
           _this5.praiseList = [];
         },
         complete: function complete() {
@@ -353,6 +358,26 @@ var _common = _interopRequireDefault(__webpack_require__(/*! ../../common/common
           uni.stopPullDownRefresh();
         } });
 
+    },
+    gotoMoviePage: function gotoMoviePage(e) {
+      var id = e.currentTarget.dataset.id;
+      uni.navigateTo({
+        url: "../movie/movie?id=".concat(id) });
+
+    },
+    // 这段视频播放的时候，让其余的视频都暂停
+    meIsPlaying: function meIsPlaying(e) {
+      var id = '';
+      if (e) {
+        id = e.currentTarget.dataset.playingindex;
+        this.videoContext = uni.createVideoContext(id);
+      }
+      var trailerSuperheroList = this.trailerSuperheroList;var _iteratorNormalCompletion = true;var _didIteratorError = false;var _iteratorError = undefined;try {
+        for (var _iterator = trailerSuperheroList[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {var item = _step.value;
+          if (item.id !== id) {
+            uni.createVideoContext(item.id).pause();
+          }
+        }} catch (err) {_didIteratorError = true;_iteratorError = err;} finally {try {if (!_iteratorNormalCompletion && _iterator.return != null) {_iterator.return();}} finally {if (_didIteratorError) {throw _iteratorError;}}}
     } },
 
   components: {

@@ -1,0 +1,92 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 页面铺满屏幕 */
+.page-fill.data-v-1b6a108a {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+}
+.birth-input.data-v-1b6a108a {
+	background-color: white;
+	height: 80rpx;
+	line-height: 40rpx;
+	padding-left: 20rpx;
+}
+.birthday.data-v-1b6a108a {
+	background-color: white;
+	height: 80rpx;
+	padding-left: 20rpx;
+	padding-top: 30rpx;
+}
+.submitBtn.data-v-1b6a108a {
+	width: 95%;
+	margin-top: 40rpx;
+}
+

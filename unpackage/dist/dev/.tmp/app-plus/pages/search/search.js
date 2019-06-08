@@ -134,7 +134,16 @@ var _common = _interopRequireDefault(__webpack_require__(/*! ../../common/common
 var _default = { data: function data() {return { rowsList: [], myKeywords: '', // 搜索的关键字
       page: 1, // 当前第几页
       totalPages: 0 // 总页数
-    };}, onLoad: function onLoad() {this._getSearchPageData();}, methods: { _getSearchPageData: function _getSearchPageData() {var _this = this;uni.showLoading({ title: '加载中', mask: true });uni.request({
+    };}, onLoad: function onLoad() {this._getSearchPageData();}, onReachBottom: function onReachBottom() {// 上拉加载触底的函数
+    var page = this.page + 1;var myKeywords = this.myKeywords;var totalPages = this.totalPages;if (page > totalPages) {return false;}this.pagedTrailerList(myKeywords, page, 15);
+  },
+  methods: {
+    _getSearchPageData: function _getSearchPageData() {var _this = this;
+      uni.showLoading({
+        title: '加载中',
+        mask: true });
+
+      uni.request({
         url: _common.default.api_base_url + '/search/list?keywords=&page=&pageSize=',
         header: {
           'Content-Type': 'application/x-www-form-urlencoded' },
@@ -151,7 +160,7 @@ var _default = { data: function data() {return { rowsList: [], myKeywords: '', /
           }
         },
         fail: function fail(err) {
-          console.log(err, " at pages\\search\\search.vue:54");
+          console.log(err, " at pages\\search\\search.vue:63");
           _this.rowsList = [];
         },
         complete: function complete() {
@@ -187,11 +196,17 @@ var _default = { data: function data() {return { rowsList: [], myKeywords: '', /
           }
         },
         fail: function fail(err) {
-          console.log(err, " at pages\\search\\search.vue:90");
+          console.log(err, " at pages\\search\\search.vue:99");
         },
         complete: function complete() {
           uni.hideLoading();
         } });
+
+    },
+    gotoMovie: function gotoMovie(e) {
+      var id = e.currentTarget.dataset.id;
+      uni.navigateTo({
+        url: "../movie/movie?id=".concat(id) });
 
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-app-plus/dist/index.js */ "./node_modules/@dcloudio/uni-app-plus/dist/index.js")["default"]))

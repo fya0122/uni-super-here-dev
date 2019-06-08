@@ -4,7 +4,7 @@
 		<swiper :circular="true" class="carousel" :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000">
 			<block v-for="item in swiperList" :key="item.id">
 				<swiper-item>
-					<image :src="item.image"></image>
+					<image :data-id="item.movieId" @click="gotoMoviePage" :src="item.image"></image>
 				</swiper-item>
 			</block>
 		</swiper>
@@ -22,7 +22,7 @@
 		<scroll-view scroll-x="true" class="page-block hot">
 			<view v-for="item in hotSuperheroList" :key="item.id" class="single-poster">
 				<view class="poster-wrapper">
-					<image class="poster" :src="item.cover"></image>
+					<image :data-id="item.id" @click="gotoMoviePage" class="poster" :src="item.cover"></image>
 					<view class="movie-name">
 						{{ item.name }}
 					</view>
@@ -46,8 +46,8 @@
 		</view>
 		<!-- 热门预告的那些v-for -->
 		<view class="page-block hot-movies">
-			<video class="hot-movie-single" controls :poster="item.poster" :key="item.id" v-for="item in trailerSuperheroList"
-			 :src="item.trailer"></video>
+			<video :id="item.id" :data-playingindex="item.id" @play="meIsPlaying" class="hot-movie-single" controls :poster="item.poster"
+			 :key="item.id" v-for="item in trailerSuperheroList" :src="item.trailer"></video>
 		</view>
 		<!-- 猜你喜欢 -->
 		<view class="page-block super-hot">
@@ -60,7 +60,7 @@
 		</view>
 		<view class="page-block guess-u-like">
 			<view :key="item.id" v-for="(item, index) in praiseList" class="single-like-movie">
-				<image :src="item.cover" class="like-movie-img"></image>
+				<image :data-id="item.id" @click="gotoMoviePage" :src="item.cover" class="like-movie-img"></image>
 				<view class="movie-desc">
 					<view class="movie-title">
 						{{ item.name }}
@@ -113,6 +113,11 @@
 			// 页面卸载的时候清除动画数据
 			// this.animationData = {}
 			this.animationDataArr = [{}, {}, {}, {}, {}]
+		},
+		onHide() {
+			if (this.videoContext) {
+				this.videoContext.pause();
+			}
 		},
 		onPullDownRefresh() {
 			this._getSwiperData()
@@ -253,6 +258,26 @@
 						uni.stopPullDownRefresh()
 					})
 				})
+			},
+			gotoMoviePage(e) {
+				const id = e.currentTarget.dataset.id
+				uni.navigateTo({
+					url: `../movie/movie?id=${id}`
+				})
+			},
+			// 这段视频播放的时候，让其余的视频都暂停
+			meIsPlaying(e) {
+				let id = ''
+				if (e) {
+					id = e.currentTarget.dataset.playingindex;
+					this.videoContext = uni.createVideoContext(id)
+				}
+				let trailerSuperheroList = this.trailerSuperheroList
+				for (const item of trailerSuperheroList) {
+					if (item.id !== id) {
+						uni.createVideoContext(item.id).pause();
+					}
+				}
 			}
 		},
 		components: {
